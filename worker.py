@@ -112,7 +112,7 @@ def processar_pedidos_pendentes():
                 conn.commit() # Confirma a transação para este pedido
                 print(f"  [STATUS] Pedido {order_id}: {novo_status}")
 
-            except Exception as erro:
+            except Exception as erro
                 conn.rollback() # Em caso de erro inesperado, desfaz tudo para este pedido
                 print(f"  [ERRO CRÍTICO] Falha ao processar pedido {order_id}: {erro}. Rollback completo.")
 
