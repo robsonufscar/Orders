@@ -5,6 +5,12 @@ import json # Para lidar com a coluna JSONB 'items'
 from dotenv import load_dotenv
 from pathlib import Path
 from uuid import UUID # Para converter order_id para UUID se necessário
+from datetime import datetime, timezone
+import ast
+
+# --- Importação e registro do adaptador UUID ---
+from psycopg2.extras import register_uuid
+register_uuid() # Esta linha é a correção!
 
 # --- Configuração do ambiente ---
 # Garante que o .env seja lido a partir da pasta do script
@@ -98,9 +104,9 @@ def processar_pedidos_pendentes():
         print(f"Encontrados {len(pedidos)} pedidos pendentes.")
 
         for order_id_str, items_json in pedidos:
-            order_id = UUID(order_id_str) # Converte a string para UUID
-            items = json.loads(items_json) # Converte a string JSONB para lista/dict Python
-
+            order_id = UUID(order_id_str.hex) # Converte a string para UUID
+            #items = json.loads(items_json) # Converte a string JSONB para lista/dict Python
+            items = list(items_json)
             try:
                 sucesso = processar_pedido(cur, order_id, items)
                 novo_status = "confirmed" if sucesso else "rejected_no_stock"
